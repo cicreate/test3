@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1516811148 source:c:\users\iwin_64bit\desktop\test3\main.cpp
+	<iostream>
+	<conio.h>
+	<cstring>
+	<ctime>
+	<cstdio>
+
