@@ -3,11 +3,13 @@
 #include <cstring>
 #include <ctime>
 #include <cstdio>
+#include <limits>
 using namespace std;
 int foodn=2/*anvae food*/,drinkn=2/*anvae drink*/, n/*tedad moshtarie hazer*/, cap=6;/*jame zarfiathaie food*/
 int breadready=0/*tedad breade amade*/, bonus=0/*sud*/, money=0 /*pule kol*/, breadcap=4 /*zarfiate nan*/;
 int  breadprice=2/*gheimate nan*/, breadinproc=0, /*tedade breade dar hale amade shodan*/ breadctime=1;/*zamane amade shodan*/
 char ss[100]; /*baraie zakhire saziha*/
+bool valid=false; //for input handling
 class drink {
 public:
 char name[100];
@@ -19,6 +21,7 @@ class food{
 public:
 char name[100];
 int cap, type,ctime,cookedn=0,cookingn=0,price; /*type=0|1 without|with bread, cookingn=tedad foode dar hale pokht, cookedn=tedad foode pokhte*/
+//mishod type ra bool tarif konam ama be dalaieli int behtar ast
 }f[100];
 class costumer{
 public:
@@ -33,55 +36,140 @@ public:
 int time=-1, foodcode; //time: ghabl az por shodan ba dastur -1 ast, agar dasture pokht mojaz bud time 0 va harbar dar next +10 mishavad
 }c[1000];
 void custom() {
-    int a, b;
-    char s[100];
-    cout << "How many foods do you want to add?";
-    cin>>a;
-    foodn=a+2;
-    for(int i=2; i<a+2; i++) {
-        cout<<endl<<"Food name:";
-        cin>>f[i].name;
-        cout << endl << "0.without bread  1.with bread";
-        cin >> f[i].type;
-        cout<< endl << "Capaticy:";
-        cin >> f[i].cap;
-        cap +=f[i].cap; //agar error nemidad mishod c[cap] ra tarif kard
-        cout << endl << "Price:";
-        cin >> f[i].price;
-        cout<<endl<<"Cooking time:";
-        cin>>f[i].ctime;
+
+  int foodcode=1, drinkcode=1, input1, input2;
+  cout<<" default foods: chicken, meat \n default drinks: soda, yogurt \n";
+  do{
+    cout<<"\n Do you want to add or change food or drink or change bread? \n (0=None, 1=Food, 2=drink, 3=bread) ";
+    cin>>input1;
+    if (!(valid = cin.good())) { //agar aval horuf vared konad (agar aval adad vared konad bad horuf, faghat adad ra mikhanad)
+        cout << "Typing error!(only 0, 1, 2 are valid)\n";
+        cin.clear(); //cin be jaie eshtebahi point mikonad pas pak mikonim
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');} //invalid ha ra ignore mikonad
+    else if (input1==0){break;} //No pas az halghe birun miaiad
+    else if(input1==1){ //moshakhasate foo
+        foodcode=foodn; //avalin foode khali
+        cout<< "\n Food name: \n";
+        gets(f[foodcode].name);//khati ke hast ra migirad ta dasture badi vorudi begirad
+        gets(f[foodcode].name);
+        for(int j=0; j<foodn; j++){
+            if (!strcmp(f[j].name, f[foodcode].name))
+            {foodcode=j; break;}
+            } //dar f[] migardad, agar name az default ha bud, code ra barabare shomareie aan migirad va az halghe kharej
+        if(foodcode >= foodn) { //agar code az 0 ta foodn -1 nabashad iani esmash tekrari nist, pas foodn ra ziad mikonad
+           foodn++;
+           } //agar nabud, code ra barabare foodn(chon shomreha az 0 and) va foodn ra ezafe mikonad
+        do {
+           cout << "\n 0.Without bread  1.With bread: ";
+           cin >> input2;
+           if (!(valid = cin.good())) { //vaghti valid true nabashad, (cin motabeghe noe moteghaier nist)
+            cout << "Typing error!(only 0, 1 are valid)\n";
+            cin.clear(); //jaie eshtebahi ke cin eshare mikonad ra paak mikonas
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');} //bedune mahdudiate adadi, character haie badi ignore mishavand ta enter ra bezanad(kolle khat bad az invalid)
+           else if (input2==1 || input2==0) {f[foodcode].type= input2; break;} //agar 0 ia 1 bud az halghe birun miaiad va be soal bad miravad
+           else {cout << "Typing error!(only 0, 1 are valid)\n";} //agae 0 ia 1 ia horuf nabud ham error midahad
+         } while (1);
+        do { //dar baghieie soal ha ta vaghti adad vared konad error midahad va vorudi migirad
+           cout << "\n Capacity: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {f[foodcode].cap = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Cooking time: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {f[foodcode].ctime = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Price: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {f[foodcode].price = input2; break;}
+         } while (1);
     }
-        cout << "Do you want to change default foods? (0=No, 1=Yes)";
-        cin >> b;
-        if (b==1){
-            cout<<endl<<"chicken sandwich: (0=defaualt, 1=change)";
-            cin >> b;
-            if (b) {
-                    cout << endl << "0.without bread  1.with bread";
-                    cin >> f[0].type;
-                    cout<< endl << "Capaticy:";
-                    cin >> f[0].cap;
-                    cap+=f[0].cap;
-                    cout << endl << "Price:";
-                    cin >> f[0].price;
-                    cout<<endl<<"Cooking time:";
-                    cin>>f[0].ctime;
-                    }
-            cout<<endl<<"meat sandwich: (0=defaualt, 1=change)";
-            cin >> b;
-            if (b==1) {
-                    cout << endl << "0.without bread  1.with bread";
-                    cin >> f[1].type;
-                    cout<< endl << "Capaticy:";
-                    cin >> f[1].cap;
-                    cap+=f[1].cap;
-                    cout << endl << "Price:";
-                    cin >> f[1].price;
-                    cout<<endl<<"Cooking time:";
-                    cin>>f[1].ctime;
-                    }
-            }
-cout<<endl;
+    else if(input1==2) { //moshakhasate drink (tanzimat mesle food)
+        drinkcode=drinkn;
+        cout<< "\n Drink name: ";
+        gets(d[drinkcode].name);
+        gets(d[drinkcode].name);
+        for(int j=0; j<drinkn; j++){
+            if (!strcmp(d[j].name, d[drinkcode].name))
+            {drinkcode=j; break;}
+        }
+        if(drinkcode >= drinkn) {
+        drinkn++;
+        }
+        do {
+           cout << "\n Capacity: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {d[drinkcode].cap = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Ready time: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {d[drinkcode].ctime = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Price: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {d[drinkcode].price = input2; break;}
+         } while (1);
+    }
+    else if(input1==3){ //moshakhasate bread
+        do {
+           cout << "\n Capacity: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {breadcap = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Ready time: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {breadctime = input2; break;}
+         } while (1);
+        do {
+           cout << "\n Price: ";
+           cin >> input2;
+           if (!(valid = cin.good())) {
+            cout << "Typing error!(only numbers are valid)\n";
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');}
+           else {breadprice = input2; break;}
+         } while (1);
+    }
+    else {cout << "Typing error!(just 0, 1, 2 are valid)\n";}
+
+
+  }while(1);
 
 }
 
@@ -278,7 +366,27 @@ strcpy(f[0].name,"chicken"), strcpy(f[1].name,"meat");
 f[0].type=1, f[0].cap=3, f[0].price=8, f[0].cookedn=0, f[0].cookingn=0, f[0].ctime=20;
 f[1].type=1, f[1].cap=3, f[1].price=12, f[1].cookedn=0, f[1].cookingn=0, f[1].ctime=30;
 
-//sakhte moshtari haie avalie: (moshabehe tabeie rancostumer)
+int x;
+char st[500], tool[500];
+cout<<"                         ***Welcome To Chief Dady Game!***"<<endl;
+do{
+cout<<endl<<"1.New Game   2.Customize"<<endl;
+cin>>x;
+if (x==2) {
+custom();
+break;
+}
+else if(x==1){break;}
+else { //agar gheire az 1,2 vared konad
+    if (!(valid = cin.good())) { //agar aval horuf vared konad (agar aval adad vared konad bad horuf, faghat adad ra mikhanad)
+        cout << "Typing error!(only 1, 2 are valid)\n";
+        cin.clear(); //cin be jaie eshtebahi point mikonad pas pak mikonim
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');} //invalid ha ra ignore mikonad
+    else cout<<"Typing Error! (only 1, 2 are valid)";
+}
+}while(1);
+//sakhte moshtari haie avalie: (moshabehe tabeie randcostumer)
+
 strcpy(a[0].ID,"1");
 strcpy(a[1].ID,"2");
 strcpy(a[2].ID,"3");
@@ -309,24 +417,14 @@ for (int i=0; i<7; i++){
             a[i].Unrecieved=1;}
         }
 }
-
-
-int x, k;
-char st[500], tool[500], s[100];
-cout<<"1.New Game   2.Customize"<<endl;
-cin>>x;
-if (x==2) {
-custom();
-}
-else if(x != 1) {cout<<"Typing Error!";}
-
 showcostumer(); //namaieshe customer haie avalie
 cout<<endl;
 gets(ss);
 
 while(1) {
 
-
+//inja check mikonim, kalamate kelidi mesle cook, give, next, check dar jomleie type shode hastand ia na
+//sepas riztar shode va kolle jomle ra ba jomalate motabar tatbigh midahim
              gets(st);
              int error, foodcode=-1, giver=-1, givetype; //givetype= 0|1 : drink|food
              error=1; //for typing error
@@ -338,14 +436,14 @@ while(1) {
                     strcat(tool, f[i].name);
                     if (strcmp(st,tool)==0){error=0; foodcode=i;} //foodi ke type shode ro peida, foodcode=shomarie food
                 }//jomleie type shode ro ba cook + foodname tatabogh
-                if(error==1) {cout<<"Typing Error!"<<tool<<endl;}
+                if(error==1) {cout<<"Typing Error!"<<endl;}
                 else { //agar error nadasht
                     for (int i=0; i<1000; i++)
                     if (c[i].time == -1) { c[i].foodcode=foodcode; cook(i); break;} //avalin c[i] khali peida va mifreste be tabeie cook
                 }
 
              }
-             else if (strstr(st,"give")) {
+             else if (strstr(st,"give")) { //agar dar jomle give bud, check mikonad put hast ia na
                 if(strstr(st,"put")){
 
                     for(int i=0; i<foodn; i++){
@@ -396,16 +494,17 @@ while(1) {
                 }
 
             else if (strstr(st,"next")) {
-                    if (strcmp(st,"next")) {cout<<"Typing Error (Extra words)!"<<endl;}
+                    if (strcmp(st,"next")) {cout<<"Typing Error (Extra words)!"<<endl;} //tatbighe jomle
                     else {next();}
             }
             else if (strstr(st,"check")) {
-                    if (strcmp(st,"check")) {cout<<"Typing Error (Extra words)!"<<endl;}
+                    if (strcmp(st,"check")) {cout<<"Typing Error (Extra words)!"<<endl;} //tatbighe jomle
                     else {check();}
             }
-            else {cout<<"Typing Error (Extra words)e!"<<endl;}
+            else {cout<<"Typing Error (Extra words)e!"<<endl;}//vaghti hichiek az kalamate kelidi ra nadarad
 
         }
 }
+
 
 
