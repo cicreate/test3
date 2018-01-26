@@ -302,13 +302,6 @@ void calculate(int costumer){ //hesabe pule moshtarie mojaze dar hale khoruj
        }
     for(int j=0; j<drinkn; j++) if (a[costumer].drinkord[j]==2){ money += d[j].price;}//hamchenin drink
 }
-void check(){ //namaieshe aghlam
-cout<<"**bread"<<":{"<<endl<<"  ready:"<<breadready<<endl<<"  in process:"<<breadinproc<<"}"<<endl<<endl;
-for (int i=0; i<foodn; i++){
-    cout<<"**"<<f[i].name<<":{"<<endl<<"  cooked:"<<f[i].cookedn<<endl<<"  cooking:"<<f[i].cookingn<<"}"<<endl<<endl;}
-for (int i=0; i<drinkn; i++){
-    cout<<"**"<<d[i].name<<":{"<<endl<<"  ready:"<< d[i].ready<<endl<<"  in process:"<<d[i].inproc<<"}"<<endl<<endl;}
-}
 void next() {
 int bonus=0, temp=0;
 //hesabe anaam: (mitavan in ghesmat ra dar main ham gozasht)
