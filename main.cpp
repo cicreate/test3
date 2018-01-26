@@ -1,4 +1,3 @@
-//mikham file bezaram ke save she ah
 #include <iostream>
 #include <conio.h>
 #include <cstring>
