@@ -203,13 +203,6 @@ for (int i=0; i<7; i++){
 }
 cout<<endl;
 }
-void calculate(int costumer){ //hesabe pule moshtarie mojaze dar hale khoruj
-    for(int j=0; j<foodn; j++)
-       {if (a[costumer].foodord[j]==2){money += f[j].price;} //pule kol ra ba gheimate food jam mizanad
-        if(f[j].type==1){money += breadprice;} //agar ba bread bud, gheimate bread ra ham jam mizanad
-       }
-    for(int j=0; j<drinkn; j++) if (a[costumer].drinkord[j]==2){ money += d[j].price;}//hamchenin drink
-}
 void check(){ //namaieshe aghlam
 cout<<"**bread"<<":{"<<endl<<"  ready:"<<breadready<<endl<<"  in process:"<<breadinproc<<"}"<<endl<<endl;
 for (int i=0; i<foodn; i++){
