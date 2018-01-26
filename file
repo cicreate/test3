@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    unsigned int account;
+    char name[30];
+    double balance;
+
+    FILE *cfptr;
+
+    if((cfptr=fopen("cicreate.dat","a"))==NULL)
+        puts("file could not be opened");
+
+    else
+    {
+        printf("%s","?");
+        scanf("%d%29s%1f",&account,name,&balance);
+
+        while(!feof(stdin))
+        {
+            fprintf(cfptr,"%d%s%.2f\n",account,name,balance);
+            printf("%s","?");
+            scanf("%d%29s%1f",&account,name,&balance);
+        }
+
+    }
+    fclose(cfptr);
+    if((cfptr=fopen("cicreate.dat","r"))==NULL)
+    {
+        puts("file could not be opened");
+    }
+    else
+    {
+       printf("%-10s%-13s%s\n","ACCOUNT","NAME","BALANCE");
+       fscanf(cfptr,"%d%29s%1f",&account,name,&balance);
+
+        while(!feof(cfptr))
+        {
+            printf("%-10d%-13s%7.2f\n",account,name,balance);
+       fscanf(cfptr,"%d%29s%1f",&account,name,&balance);
+        }
+    fclose(cfptr);
+    }
+
+
+}
