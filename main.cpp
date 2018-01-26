@@ -1,3 +1,7 @@
+//Chief Dady Game
+//Created by Cicrate group
+//Nirvana & Sara
+
 #include <iostream>
 #include <conio.h>
 #include <cstring>
