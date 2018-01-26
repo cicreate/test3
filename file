@@ -9,19 +9,19 @@ int main()
 
     FILE *cfptr;
 
-    if((cfptr=fopen("cicreate.dat","a"))==NULL)
+    if((cfptr=fopen("cicreate.dat","w"))==NULL)
         puts("file could not be opened");
 
     else
     {
         printf("%s","?");
-        scanf("%d%29s%1f",&account,name,&balance);
+        scanf("%d",&account);
 
         while(!feof(stdin))
         {
-            fprintf(cfptr,"%d%s%.2f\n",account,name,balance);
+            fprintf(cfptr,"%d\n",account);
             printf("%s","?");
-            scanf("%d%29s%1f",&account,name,&balance);
+            scanf("%d",&account);
         }
 
     }
@@ -32,13 +32,13 @@ int main()
     }
     else
     {
-       printf("%-10s%-13s%s\n","ACCOUNT","NAME","BALANCE");
-       fscanf(cfptr,"%d%29s%1f",&account,name,&balance);
+       printf("%-10s\n","ACCOUNT");
+       fscanf(cfptr,"%d",&account);
 
         while(!feof(cfptr))
         {
-            printf("%-10d%-13s%7.2f\n",account,name,balance);
-       fscanf(cfptr,"%d%29s%1f",&account,name,&balance);
+            printf("%-10d\n",account);
+       fscanf(cfptr,"%d",&account);
         }
     fclose(cfptr);
     }
